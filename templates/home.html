@@ -7,6 +7,11 @@
     </head>
     <body>
         <div class="row">
+            <div class="col-md-3" style="margin: 20px;">
+                <a href="/logout"><button class="btn btn-primary">Logout</button></a>
+            </div>
+        </div>
+        <div class="row">
             {%for i in d%}
                 <div class="card text-dark bg-light mb-3" style="max-width: 18rem; margin: 10px;" >
                   <div class="card-header">{{i}}</div>

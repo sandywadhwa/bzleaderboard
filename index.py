@@ -38,8 +38,8 @@ def leaderboard(name):
         criteria = {
             "HACKERRANK" : { 'ds_score': 50, 'algo_score': 200},
             "MENTORPICK" : {'solved_count': 52},
-            "CODEFORCES" : {'solved_count': 20, 'contests_participated': 1, 'user_rating': 600},
-            "CODECHEF" : {'solved_count': 25, 'contests_participated': 4, 'user_rating': 1400, 'star_rating': 2},
+            "CODEFORCES" : {'solved_count': 20, 'contests_participated': 1, 'highest_rating': 600},
+            "CODECHEF" : {'solved_count': 25, 'contests_participated': 4, 'highest_rating': 1400, 'star_rating': 2},
             "VJUDGE" : {'solved_count': 0},
             "LEETCODE" : {'solved_count': 30, 'contests_participated': 2}
         }
@@ -49,11 +49,25 @@ def leaderboard(name):
             di = s['data']['leaderboard'][i]['stats']
             for j in l2:
                 for k in criteria[j]:
-                    if criteria[j][k]<= di[j][k]:
-                        count-=1
+                    try:
+                        if criteria[j][k]<= di[j][k]:
+                            count-=1
+                            di[j][k] = [di[j][k],"#10D002"]
+                        else:
+                            di[j][k] = [di[j][k],"#e0320b"]
+                    except:
+                        di[j][k] = [0,"#e0320b"]
             if di['MENTORPICK']['solved_count']+di['VJUDGE']['solved_count']>=80:
                 count-=1
-            s['data']['leaderboard'][i]['stats']['count'] = count
+                di['MENTORPICK']['solved_count'] = [di['MENTORPICK']['solved_count'],"#10D002"]
+                di['VJUDGE']['solved_count'] = [di['VJUDGE']['solved_count'],"#10D002"]
+            else:
+                di['MENTORPICK']['solved_count'] = [di['MENTORPICK']['solved_count'],"#e0320b"]
+                di['VJUDGE']['solved_count'] = [di['VJUDGE']['solved_count'],"#e0320b"]
+            if count == 0:
+                s['data']['leaderboard'][i]['stats']['count'] = [count,"#10D002"]
+            else:
+                s['data']['leaderboard'][i]['stats']['count'] = [count,"#e0320b"]
         return render_template("index.html",l = s['data']['leaderboard'],l1= l1,criteria = criteria,name = name)
     return redirect(url_for("home"))
 @app.route("/")
