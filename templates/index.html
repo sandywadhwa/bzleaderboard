@@ -53,7 +53,7 @@
                     <tr>
                         <th rowspan="2" style="background-color: 737A73;">S. NO</th>
                         <th rowspan="2" style="background-color: 737A73;">Name</th>
-                        <th rowspan="2" style="background-color: #737A73;">TO be cleared</th>
+                        <th rowspan="2" style="background-color: #737A73;">Red count</th>
                         <th colspan="1">Mentorpick</th>
                         <th colspan="2">Hackerrank</th>
                         <th colspan="1">Vjudge</th>
@@ -94,7 +94,11 @@
                     <tr>
                         <td style="background-color: white;"></td>
                         <td style="background-color: white;">{{i['name']}}</td>
-                        <td style="background-color: white;">{{i['stats']['count']}}</td>
+                        {%if i['stats']['count']==0 %}
+                        <td style="background-color: white;color: green;">{{i['stats']['count']}}</td>
+                        {%else%}
+                        <td style="background-color: white;color: red;">{{i['stats']['count']}}</td>
+                        {%endif%}
                         {%if i['stats']['MENTORPICK']['solved_count']+i['stats']['VJUDGE']['solved_count']>=80%}
                         <td style="background-color: #10D002;">{{i['stats'][l1[0]]['solved_count']}}</td>
                         {%else%}

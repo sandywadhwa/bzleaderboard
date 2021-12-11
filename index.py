@@ -19,7 +19,8 @@ def login():
           return redirect(url_for('home'))
         else:
             return redirect(url_for('login'))
-   return '''
+   return render_template("login.html")
+   '''
 	
    <form action = "" method = "post">
       <input type = text name = username Placeholder="Username">
