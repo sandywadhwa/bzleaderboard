@@ -1,7 +1,33 @@
-from flask import Flask,render_template,redirect,url_for
+from flask import Flask,render_template,redirect,url_for,session,request
 import requests
 app = Flask(__name__)
+app.secret_key = "abc"
+admins = {"bzadmin":"admin@beingzero"}
 d = {"CMRCET2024P1":"bz-cmrcet-2024-p1","BZKLH1923P1":"bz-klh-23-p1","BZCMRTC2024P1":"bz-cmrtc-2024-p1"}
+@app.route('/logout')
+def logout():
+   # remove the username from the session if it is there
+   session.pop('username', None)
+   return redirect(url_for('login'))
+@app.route('/login', methods = ['GET', 'POST'])
+def login():
+   if request.method == 'POST':
+        user = request.form['username']
+        password = request.form['password']
+        if user in admins and admins[user] == password:
+          session['username'] = user
+          return redirect(url_for('home'))
+        else:
+            return redirect(url_for('login'))
+   return '''
+	
+   <form action = "" method = "post">
+      <input type = text name = username Placeholder="Username">
+      <input type = text name = password Placeholder = "Password">
+      <input type = submit value = Login>
+   </form>
+	
+   '''
 @app.route("/<name>")
 def leaderboard(name):
     if name in d:
@@ -31,6 +57,8 @@ def leaderboard(name):
     return redirect(url_for("home"))
 @app.route("/")
 def home():
-    return render_template("home.html",d=d)
+    if "username" in session:
+        return render_template("home.html",d=d)
+    return redirect(url_for("login"))
 if __name__ == '__main__':
     app.run(debug=True)
